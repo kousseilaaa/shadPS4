@@ -28,7 +28,8 @@ TextureCache::TextureCache(const Vulkan::Instance& instance_, Vulkan::Scheduler&
     : instance{instance_}, scheduler{scheduler_}, liverpool{liverpool_},
       buffer_cache{buffer_cache_}, tracker{tracker_}, blit_helper{instance, scheduler},
       tile_manager{instance, scheduler, buffer_cache.GetUtilityBuffer(MemoryUsage::Stream)},
-      readback_linear_images{EmulatorSettings.IsReadbackLinearImagesEnabled()} {
+      readback_linear_images{EmulatorSettings.IsReadbackLinearImagesEnabled()},
+      readback_linear_images_sync{EmulatorSettings.IsReadbackLinearImagesSync()} {
 
     u32 max_samplers = instance.GetMaxSamplerAllocationCount();
     trigger_gc_samplers = max_samplers * 3 / 4;
@@ -62,10 +63,21 @@ TextureCache::~TextureCache() = default;
 
 void TextureCache::ProcessDownloadImages() {
     std::unique_lock lk{download_images_mutex};
+    if (download_images.empty()) {
+        return;
+    }
+    RENDERER_TRACE;
+    ZoneValue(download_images.size());
+    TracyPlot("PendingImageDownloads", static_cast<s64>(download_images.size()));
     for (const ImageId image_id : download_images) {
-        DownloadImageMemory(image_id, true);
+        DownloadImageMemory(image_id, readback_linear_images_sync);
     }
     download_images.clear();
+    if (!readback_linear_images_sync) {
+        // The deferred writebacks wait on CurrentTick(); submit now so they land
+        // one GPU-batch later instead of at the next natural submit.
+        scheduler.Flush();
+    }
 }
 
 void TextureCache::RecordRtWrite(VAddr addr, ImageId id) {
@@ -78,6 +90,11 @@ void TextureCache::RecordRtWrite(VAddr addr, ImageId id) {
 // at an address and a smaller texture source at the same address is later sampled, we must
 // explicitly copy the data from the larger RT VkImage to the smaller texture VkImage.
 void TextureCache::CopyFromLastRt(VAddr addr, ImageId tex_id, u32 copy_w, u32 copy_h) {
+    // Fast path: only the CP thread mutates last_rt_address_, so an unlocked
+    // empty check cannot race and avoids a global lock per texture bind.
+    if (last_rt_address_.empty()) {
+        return;
+    }
     std::scoped_lock lock{mutex};
     auto it = last_rt_address_.find(addr);
     if (it == last_rt_address_.end()) {
@@ -125,9 +142,12 @@ void TextureCache::DownloadImageMemory(ImageId image_id, bool sync) {
     if (False(image.flags & ImageFlagBits::GpuModified)) {
         return;
     }
+    RENDERER_TRACE;
     auto& download_buffer = buffer_cache.GetUtilityBuffer(MemoryUsage::Download);
     const u32 download_size = image.info.pitch * image.info.size.height * image.info.size.depth *
                               image.info.resources.layers * (image.info.num_bits / 8);
+    ZoneValue(download_size);
+    TracyPlot("DownloadBytes", static_cast<s64>(download_size));
     ASSERT(download_size <= image.info.guest_size);
     const auto [download, offset] = download_buffer.Map(download_size);
     download_buffer.Commit();

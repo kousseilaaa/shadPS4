@@ -98,6 +98,7 @@ public:
 
     /// Add an image to the download queue for guest memory writeback on next submit.
     void AddDownload(ImageId image_id) {
+        std::unique_lock lk{download_images_mutex};
         download_images.emplace(image_id);
     }
 
@@ -348,6 +349,7 @@ private:
     Common::LeastRecentlyUsedCache<ImageId, u64> lru_cache;
     Common::LeastRecentlyUsedCache<u64, u64> sampler_lru_cache;
     bool readback_linear_images;
+    bool readback_linear_images_sync;
     tsl::robin_map<VAddr, ImageId> last_rt_address_;
     PageTable page_table;
     std::mutex mutex;
