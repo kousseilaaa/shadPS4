@@ -102,6 +102,7 @@ void Scheduler::Flush() {
 }
 
 void Scheduler::Finish() {
+    RENDERER_TRACE;
     // When finishing, we need to wait for the submission to have executed on the device.
     const u64 presubmit_tick = CurrentTick();
     SubmitInfo info{};
@@ -149,6 +150,7 @@ void Scheduler::AllocateWorkerCommandBuffers() {
 }
 
 void Scheduler::SubmitExecution(SubmitInfo& info) {
+    RENDERER_TRACE;
     std::scoped_lock lk{submit_mutex};
     const u64 signal_value = master_semaphore.NextTick();
 

@@ -334,6 +334,7 @@ void VideoOutDriver::SubmitFlipInternal(VideoOutPort* port, s32 index, s64 flip_
         .index = index,
         .eop = is_eop,
     });
+    TracyPlot("FlipQueueDepth", static_cast<s64>(requests.size()));
 }
 
 void VideoOutDriver::PresentThread(std::stop_token token) {
@@ -377,6 +378,7 @@ void VideoOutDriver::PresentThread(std::stop_token token) {
                     }
                 }
             } else {
+                ZoneScopedNC("PresentThread::Flip", RendererMarkerColor);
                 Flip(request);
                 FRAME_END;
             }

@@ -6,6 +6,7 @@
 #include "video_core/renderer_vulkan/vk_master_semaphore.h"
 
 #include "common/assert.h"
+#include "common/debug.h"
 
 namespace Vulkan {
 
@@ -56,6 +57,8 @@ void MasterSemaphore::Wait(u64 tick) {
     }
 
     // If none of the above is hit, fallback to a regular wait
+    RENDERER_TRACE;
+    ZoneValue(tick);
     const vk::SemaphoreWaitInfo wait_info = {
         .semaphoreCount = 1,
         .pSemaphores = &semaphore.get(),
