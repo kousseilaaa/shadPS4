@@ -46,6 +46,7 @@
 
 #ifdef _WIN32
 #include <WinSock2.h>
+#include <timeapi.h>
 #endif
 
 #ifndef _WIN32
@@ -66,6 +67,9 @@ Emulator::Emulator() {
     Common::NtApi::Initialize();
     SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
     SetErrorMode(SetErrorMode(0) | SEM_NOGPFAULTERRORBOX);
+    // Raise the global timer resolution so sleeps/waits across the process don't
+    // overshoot by a full ~15.6ms system tick (ruinous for 16.6ms frame pacing).
+    timeBeginPeriod(1);
     // need to init this in order for winsock2 to work
     WORD versionWanted = MAKEWORD(2, 2);
     WSADATA wsaData;

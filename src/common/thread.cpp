@@ -36,6 +36,10 @@
 #define cpu_set_t cpuset_t
 #endif
 
+#if defined(_WIN32) && !defined(CREATE_WAITABLE_TIMER_HIGH_RESOLUTION)
+#define CREATE_WAITABLE_TIMER_HIGH_RESOLUTION 0x00000002
+#endif
+
 namespace Common {
 
 #ifdef __APPLE__
@@ -112,13 +116,31 @@ bool AccurateSleep(const std::chrono::nanoseconds duration, std::chrono::nanosec
                    const bool interruptible) {
     const auto begin_sleep = std::chrono::high_resolution_clock::now();
 
+    // A high-resolution timer is not bound by the system tick (up to 15.6ms of overshoot
+    // otherwise); keep one per thread to avoid a create/close syscall pair on every sleep.
+    struct TimerHolder {
+        HANDLE handle;
+        TimerHolder() {
+            handle = ::CreateWaitableTimerExW(NULL, NULL, CREATE_WAITABLE_TIMER_HIGH_RESOLUTION,
+                                              TIMER_ALL_ACCESS);
+            if (!handle) {
+                // Pre-Windows 10 1803 fallback
+                handle = ::CreateWaitableTimer(NULL, TRUE, NULL);
+            }
+        }
+        ~TimerHolder() {
+            if (handle) {
+                ::CloseHandle(handle);
+            }
+        }
+    };
+    thread_local TimerHolder timer;
+
     LARGE_INTEGER interval{
         .QuadPart = -1 * (duration.count() / 100u),
     };
-    HANDLE timer = ::CreateWaitableTimer(NULL, TRUE, NULL);
-    SetWaitableTimer(timer, &interval, 0, NULL, NULL, 0);
-    const auto ret = WaitForSingleObjectEx(timer, INFINITE, interruptible);
-    ::CloseHandle(timer);
+    SetWaitableTimer(timer.handle, &interval, 0, NULL, NULL, 0);
+    const auto ret = WaitForSingleObjectEx(timer.handle, INFINITE, interruptible);
 
     if (remaining) {
         const auto end_sleep = std::chrono::high_resolution_clock::now();
