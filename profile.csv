@@ -1,0 +1,24 @@
+name,src_file,src_line,total_ns,total_perc,counts,mean_ns,min_ns,max_ns,std_ns
+Vulkan::MasterSemaphore::Wait,D:/vscode/shadPS4/shared/src/video_core/renderer_vulkan/vk_master_semaphore.cpp,60,3052846495,3.182277,1115,2737978,1733,10555308,4118837.774179
+VideoCore::TextureCache::DownloadImageMemory,D:/vscode/shadPS4/shared/src/video_core/texture_cache/texture_cache.cpp,145,7577772,0.007899,1580,4796,2523,85031,3348.791862
+VideoCore::RegionManager::UpdateProtection,D:/vscode/shadPS4/shared/src\video_core/buffer_cache/region_manager.h,174,8205077,0.008553,339251,24,7,98228,208.846399
+VideoCore::RegionManager::ForEachModifiedRange,D:/vscode/shadPS4/shared/src\video_core/buffer_cache/region_manager.h,113,35089230,0.036577,339251,103,44,166537,508.542519
+VideoCore::PageManager::Impl::UpdatePageWatchers,D:/vscode/shadPS4/shared/src/video_core/page_manager.cpp,223,7769102,0.008098,632,12292,9249,36872,3302.422629
+VideoCore::TextureCache::RefreshImage,D:/vscode/shadPS4/shared/src/video_core/texture_cache/texture_cache.cpp,778,14555092,0.015172,632,23030,9565,77993,12790.917881
+VideoCore::RegionManager::IsRegionModified,D:/vscode/shadPS4/shared/src\video_core/buffer_cache/region_manager.h,147,22735681,0.023700,1093851,20,7,158378,241.566545
+Vulkan::Rasterizer::Draw,D:/vscode/shadPS4/shared/src/video_core/renderer_vulkan/vk_rasterizer.cpp,190,9623135306,10.031124,750943,12814,3048,1711947,11327.703069
+Libraries::Kernel::sceKernelWaitEqueue,D:/vscode/shadPS4/shared/src/core/libraries/kernel/equeue.cpp,464,11898571082,12.403031,632,18826852,408390,41617305,11146836.221097
+Libraries::GnmDriver::WaitGpuIdle,D:/vscode/shadPS4/shared/src/core/libraries/gnmdriver/gnmdriver.cpp,87,10303573880,10.740411,632,16303123,45,40668778,16350114.109986
+VideoCore::PageManager::Impl::Protect,D:/vscode/shadPS4/shared/src/video_core/page_manager.cpp,202,12546407,0.013078,1580,7940,1183,58837,4047.566006
+VideoCore::PageManager::Impl::UpdatePageWatchers,D:/vscode/shadPS4/shared/src/video_core/page_manager.cpp,223,8248707,0.008598,948,8701,1758,72738,5127.950906
+Vulkan::Rasterizer::OnSubmit,D:/vscode/shadPS4/shared/src/video_core/renderer_vulkan/vk_rasterizer.cpp,390,3737881,0.003896,316,11828,8961,26671,3642.217793
+Libraries::GnmDriver::sceGnmSubmitCommandBuffersForWorkload,D:/vscode/shadPS4/shared/src/core/libraries/gnmdriver/gnmdriver.cpp,2205,10310000419,10.747110,316,32626583,29550453,40686491,1495142.002457
+Vulkan::Scheduler::SubmitExecution,D:/vscode/shadPS4/shared/src/video_core/renderer_vulkan/vk_scheduler.cpp,153,134532253,0.140236,3327,40436,14231,375990,29795.360509
+Vulkan::Rasterizer::DispatchDirect,D:/vscode/shadPS4/shared/src/video_core/renderer_vulkan/vk_rasterizer.cpp,317,15256956,0.015904,1264,12070,5658,175183,7127.097439
+VideoCore::PageManager::Impl::UpdatePageWatchers(VAddr, u64)::(anonymous class)::operator(),D:/vscode/shadPS4/shared/src/video_core/page_manager.cpp,240,6172187,0.006434,632,9766,6312,31947,2838.097969
+PresentThread::Flip,D:/vscode/shadPS4/shared/src/core/libraries/videoout/driver.cpp,381,163532104,0.170465,317,515874,323252,1146296,131501.765436
+VideoCore::PageManager::Impl::UpdatePageWatchers(VAddr, u64)::(anonymous class)::operator(),D:/vscode/shadPS4/shared/src/video_core/page_manager.cpp,240,6662152,0.006945,948,7027,1242,70746,4629.774927
+VideoCore::TextureCache::ProcessDownloadImages,D:/vscode/shadPS4/shared/src/video_core/texture_cache/texture_cache.cpp,69,59996430,0.062540,1580,37972,17259,265092,28010.340671
+VideoCore::MemoryTracker::IteratePages,D:/vscode/shadPS4/shared/src\video_core/buffer_cache/memory_tracker.h,136,174142639,0.181526,4658260,37,5,1248806,612.730799
+Libraries::GnmDriver::sceGnmSubmitDone,D:/vscode/shadPS4/shared/src/core/libraries/gnmdriver/gnmdriver.cpp,2314,513264,0.000535,316,1624,1086,10258,677.321972
+VideoCore::MemoryTracker::IteratePages,D:/vscode/shadPS4/shared/src\video_core/buffer_cache/memory_tracker.h,136,77937071,0.081241,335130,232,102,166941,630.711609
