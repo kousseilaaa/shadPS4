@@ -159,7 +159,6 @@ private:
     // Experimental tab
     int readbacksModeSetting;
     bool readbackLinearImagesSetting;
-    bool readbackLinearImagesSyncSetting;
     bool directMemoryAccessSetting;
     // Windows static guest red-zone protection
     int windowsGuestRedZoneProtectionModeSetting;
