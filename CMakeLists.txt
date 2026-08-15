@@ -645,8 +645,6 @@ set(NP_LIBS src/core/libraries/np/np_error.h
             src/core/libraries/np/np_types2.h
             src/core/libraries/np/np_trophy.cpp
             src/core/libraries/np/np_trophy.h
-            src/core/libraries/np/np_tus.cpp
-            src/core/libraries/np/np_tus.h
             src/core/libraries/np/trophy_ui.cpp
             src/core/libraries/np/trophy_ui.h
             src/core/libraries/np/np_party.cpp
@@ -691,6 +689,9 @@ set(NP_LIBS src/core/libraries/np/np_error.h
             src/core/libraries/np/np_web_api2/np_web_api2_context.h
             src/core/libraries/np/np_web_api2/np_web_api2_push_event.cpp
             src/core/libraries/np/np_web_api2/np_web_api2_push_event.h
+            src/core/libraries/np/np_tus/np_tus.cpp
+            src/core/libraries/np/np_tus/np_tus.h
+            src/core/libraries/np/np_tus/np_tus_ctx.h
 )
 
 set(ZLIB_LIB src/core/libraries/zlib/zlib.cpp
@@ -1374,6 +1375,10 @@ endif()
 
 if (WIN32)
     target_sources(shadps4 PRIVATE src/dist/shadps4.rc)
+endif()
+
+if (NOT MSVC)
+    target_compile_options(shadps4 PRIVATE -Wno-invalid-offsetof)
 endif()
 
 add_compile_definitions(BOOST_ASIO_STANDALONE)
