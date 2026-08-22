@@ -31,6 +31,8 @@ set(SETTINGS_TEST_SOURCES
     # Stubs that replace dependencies
     stubs/common_stub.cpp
     stubs/core_stub.cpp
+    stubs/signals_stub.cpp
+    stubs/file_sys_stub.cpp
     stubs/scm_rev_stub.cpp
     stubs/sdl_stub.cpp
 
@@ -57,6 +59,8 @@ set(NGS2_TEST_SOURCES
     # Stubs that replace dependencies
     stubs/common_stub.cpp
     stubs/core_stub.cpp
+    stubs/signals_stub.cpp
+    stubs/file_sys_stub.cpp
     stubs/scm_rev_stub.cpp
     stubs/sdl_stub.cpp
 
@@ -148,6 +152,8 @@ set(GCN_TEST_SOURCES
     stubs/scm_rev_stub.cpp
     stubs/sdl_stub.cpp
     stubs/core_stub.cpp
+    stubs/signals_stub.cpp
+    stubs/file_sys_stub.cpp
 
     gcn/gcn_test_runner.hpp
     gcn/gcn_test_runner.cpp
@@ -279,6 +285,8 @@ set(HTTP_TEST_SOURCES
     stubs/sdl_stub.cpp
     stubs/loader_stub.cpp
     stubs/core_stub.cpp
+    stubs/signals_stub.cpp
+    stubs/file_sys_stub.cpp
     stubs/kernel_stub.cpp
 
     # Tests
